@@ -1,0 +1,52 @@
+<div class="w-full max-w-lg">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" netlify action="">
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold">
+        Get your quote within 24 hours.
+      </h2>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+        Name <span class="text-red-500"> * </span>
+      </label>
+      <input
+        class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+        type="text" id="name" name="name" required>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="number">
+        Phone Number <span class="text-red-500"> * </span>
+      </label>
+      <input
+        class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+        type="text" id="number" name="number" required>
+    </div>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="notes">
+        Notes <span class="text-gray-500">(Optional)</span>
+      </label>
+      <p class="text-sm text-gray-600 mb-2">Any details help! Or we can discuss everything when we call you.</p>
+      <textarea
+        class="appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight resize-y"
+        id="notes" name="notes" rows="4"
+        placeholder="4 bedroom house in Reading, need to clear out all rooms."></textarea>
+    </div>
+    <div class="mt-6 text-xs text-center text-gray-500">
+      <span class="font-semibold">No obligation, no stress.</span> By submitting, you agree to our <a
+        href="/privacy-policy" class="text-green-600 hover:text-green-800 underline">Privacy Policy</a>. We keep your
+      data
+      private and use it only to improve our service.
+    </div>
+    <div class="mt-6">
+      <button type="submit"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+        Get My Free Quote
+      </button>
+
+      <div class="mt-6 text-xs text-center text-gray-500">
+        <p>🔒 Your data is sent securely and kept private.</p>
+        <p>We will never sell your data.</p>
+      </div>
+    </div>
+  </form>
+</div>

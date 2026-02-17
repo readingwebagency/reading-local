@@ -1,0 +1,10 @@
+{
+  "domain": "https://business.co.uk",
+  "name": "Abc ltd",
+  "paths": {
+    "home": "/",
+    "contact": "/contact/",
+    "reviews": "/reviews/",
+    "gallery": "/gallery/"
+  }
+}

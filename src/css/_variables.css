@@ -1,0 +1,12 @@
+:root {
+  /* Site's master maximum width (e.g., your old max-w-7xl value) */
+  --content-max-width: 1280px;
+  --article-max-width: 800px; 
+  
+  /* Horizontal space reserved for gutters/padding on small screens */
+  --content-padding: 1.5rem; 
+  /* Trustworthy navy/grey */
+  --color-primary: theme('colors.slate.700');    
+  --color-accent: theme('colors.green.700');
+  --color-brand: theme('colors.green.900');
+}

@@ -1,0 +1,16 @@
+<div class="flex justify-center items-center gap-10 flex-wrap">
+    <div class="w-4/5 lg:w-1/3 flex flex-col gap-5">
+        <p @text="subtitle"></p>
+        <h3 @text="h3" id="serviceTitle" class="text-5xl font-bold">
+            80% Less Than Replacement Windows.
+        </h3>
+        <p>
+            <slot>
+                Our re-spraying process is honed in over years of experience.
+                That means we can re-spray your windows quickly and pass the savings onto you.
+            </slot>
+        </p>
+        <cta></cta>
+    </div>
+    <img :src="image" alt="" class="w-4/5 aspect-image lg:w-1/3 lg:order-first">
+</div>

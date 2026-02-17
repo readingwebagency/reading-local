@@ -1,0 +1,102 @@
+@import './_variables.css';
+@import 'tailwindcss';
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+@layer components {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-primary);
+    @apply font-normal;
+    line-height: 1.2;
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+
+  a {
+    /* Apply blue color and underline using Tailwind utilities */
+    @apply text-blue-600 hover:text-blue-800 hover:underline;
+  }
+
+  .content-container {
+    /* Calculates the smaller of the max width OR 100% minus padding */
+    width: min(var(--content-max-width),
+        100% - var(--content-padding) * 2);
+
+    /* Centers the container */
+    margin-inline: auto;
+    @apply py-10;
+  }
+
+  .article-container {
+    /* Calculates the smaller of the max width OR 100% minus padding */
+    width: min(800px, 100% - var(--content-padding) * 2);
+    /* Centers the container */
+    margin-inline: auto;
+    @apply py-10;
+  }
+}
+
+body {
+  font-family: ui-serif, Georgia, serif;
+  /* Keep serif for body text */
+}
+
+nav a {
+  @apply text-white;
+}
+
+footer a {
+  @apply text-white;
+}
+
+.article h1,
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+  @apply mb-6;
+  @apply mt-10;
+}
+
+
+.article ul {
+  @apply flex flex-col gap-3;
+  @apply list-disc list-inside;
+  @apply mt-5 mb-5 pl-6;
+}
+
+/* Section styles */
+.section-dark {
+  background-color: theme('colors.slate.900');
+  color: white;
+}
+
+.section-light {
+  background-color: white;
+  color: theme('colors.slate.700');
+}
+
+.section-grey {
+  background-color: theme('colors.slate.100');
+  color: theme('colors.slate.700');
+}

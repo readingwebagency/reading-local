@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="canonical" href="{{ site.domain }}{{ page.url }}">
+    <!-- Cookiebanner -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ meta_description }}">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Privacy-friendly analytics by Plausible -->
+
+    <!-- Microsoft Clarity -->
+
+    <!-- Favicons -->
+
+    {%- if schemaType %}
+    <!-- schema -->
+    <script type="application/ld+json">
+    {{ schemas[schemaType] | dump | safe }}
+    </script>
+    {%- endif %}
+</head>
+
+<body>
+    <header>
+        <nav></nav>
+    </header>
+
+    {{ content | safe }}
+
+    <footer class="bg-[var(--color-brand)] p-10">
+    </footer>
+    <script src="/js/mobileMenu.js"></script>
+
+    {%-if ad %}
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const service = urlParams.get('service');
+
+        if (service) {
+            const formattedService = service.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            document.getElementById('serviceTitle').textContent = formattedService;
+        }
+    </script>
+    {%- endif %}
+</body>
+
+</html>

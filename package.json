@@ -1,0 +1,24 @@
+{
+  "name": "rwa-starter-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eleventy.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "local": "rm -rf _site/ && npx @11ty/eleventy --serve",
+    "start": "npx @11ty/eleventy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-webc": "^0.11.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
+  }
+}

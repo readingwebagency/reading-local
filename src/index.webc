@@ -1,0 +1,10 @@
+---
+title: Star Wars Characters
+layout: layouts/page.njk
+---
+
+<section>
+  <div class="content-container">
+    <h1>My business</h1>
+  </div>
+</section>
