@@ -1,0 +1,20 @@
+<div class="content-container">
+    <div class="flex flex-col gap-10 pb-10 border-gray-500">
+        <div class="bg-green-900 p-5">
+            <h2 class="text-white"> Articles </h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-5">
+            <a webc:for="(article, index) of [...articles].slice(-4).reverse()"
+                :class="`flex flex-col gap-2 hover:underline ${(index + 1) % 4 === 0 ? '' : 'border-gray-300 border-b pb-5 lg:border-b-0 lg:pb-0 lg:border-r lg:pr-5'}`"
+                :href="article.url">
+                <div class="col-span-1 h-32 w-40 lg:h-40 lg:w-full">
+                    <img class="w-full h-full object-cover" :src="article.data.thumbnail" alt="">
+                </div>
+                <h2 class="font-bold text-xl" @text="article.data.title"></h2>
+                <p class="text-gray-500" @text="article.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })"></p>
+                <p class="text-black" @text="article.data.summary"></p>
+            </a>
+        </div>
+    </div>
+    <see-more link="/articles/">See all updates</see-more>
+</div>

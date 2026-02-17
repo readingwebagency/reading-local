@@ -6,6 +6,6 @@ layout: layouts/page.njk
 
 <section>
   <div class="content-container">
-    <h1>Articles</h1>
+    <articles-feed :articles="collections.articles"></articles-feed>
   </div>
 </section>
