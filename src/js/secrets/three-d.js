@@ -14,15 +14,28 @@ function setupCanvas(canvas, width, height) {
 
 const canvas = document.getElementById("game");
 
-const ctx = setupCanvas(canvas, 400, 400);
-ctx.save();
+var dpr = window.devicePixelRatio || 1;
+// set size of css element
+canvas.style.width = 800 + 'px';
+canvas.style.height = 800 + 'px';
+// set size of canvas
+canvas.width = 800 * dpr;
+canvas.height = 800 * dpr;
+const ctx = canvas.getContext('2d');
 ctx.translate(canvas.width / 2, canvas.height / 2);
+ctx.scale(dpr, dpr);
 
-const ANGLE = 0 //2 * Math.PI - 0.0003;
+//ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+//ctx.shadowBlur = 10;
+//ctx.shadowOffsetY = 5;
+
+ctx.save();
+
+const ANGLE = 2 * Math.PI - 0.0005;
 // 1. PITCH
 pitch_unit_width = 70;
 pitch_unit_height = 110;
-scale_factor = 7
+scale_factor = 9;
 pitch_width = scale_factor * pitch_unit_width;
 pitch_height = scale_factor * pitch_unit_height;
 
@@ -52,7 +65,6 @@ function project(point) {
 function draw_points(points, close_path = false) {
     rotated_points = points.map(p => rotate(p, ANGLE))
     projected_points = rotated_points.map(p => project(p));
-    console.log(projected_points)
     ctx.beginPath();
     projected_points.forEach((p, index) => {
         if (index === 0) {
@@ -126,8 +138,8 @@ function fill_points(points) {
 }
 
 pitch = [
-    { x: -pitch_width / 2, y: pitch_height / 2, z: 1 },
-    { x: pitch_width / 2, y: pitch_height / 2, z: 1 },
+    { x: -pitch_width / 2, y: -pitch_height / 2, z: 1 },
+    { x: pitch_width / 2, y: -pitch_height / 2, z: 1 },
     { x: pitch_width / 2, y: 0, z: 1 },
     { x: -pitch_width / 2, y: 0, z: 1 }
 ]
@@ -166,20 +178,20 @@ dx = pitch_width / 5;
 starting_x = pitch_width / 2;
 players = [
     // line 1
-    { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), name: "P. Layer" },
+    { coords: { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), z: 1 }, name: "P. Layer" },
     // line 2
-    { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), name: "P. Layer" },
-    { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), name: "P. Layer" },
-    { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), name: "P. Layer" },
-    { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), name: "P. Layer" },
+    { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
     // line 3
-    { x: -1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), name: "P. Layer" },
-    { x: -.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), name: "P. Layer" },
-    { x: .5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), name: "P. Layer" },
-    { x: 1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), name: "P. Layer" },
+    { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: .5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
+    { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
     // line 4
-    { x: -.5 * dx, y: -py, name: "P. Layer" },
-    { x: .5 * dx, y: -py, name: "P. Layer" }
+    { coords: { x: -.5 * dx, y: -py, z: 1 }, name: "P. Layer" },
+    { coords: { x: .5 * dx, y: -py, z: 1 }, name: "P. Layer" }
 ]
 
 draw_stripes(6);
@@ -191,7 +203,7 @@ draw_points(pitch, close_path = true)
 draw_points(upper_six_yard_box)
 // draw_points(lower_eighteen_yard_box)
 draw_points(upper_eighteen_yard_box)
-draw_points(halfway_line)
+// draw_points(halfway_line)
 // halfway circle
 draw_3d_arc(0, 0, 10 * scale_factor, Math.PI, 2 * Math.PI, segments = 40)
 // upper D
@@ -200,37 +212,61 @@ draw_3d_arc(0, (-pitch_height / 2) + (11 * scale_factor), 10 * scale_factor, 0.5
 // draw_3d_arc(0, (pitch_height / 2) - (11 * scale_factor), 10 * scale_factor, 1.5 * Math.PI - 0.775, 1.5 * Math.PI + 0.775)
 // draw players
 
-function draw_player(player, size = 20) {
-    const offset = size / 2;
-    const boxWidth = 100;
-    const boxHeight = 20;
+function draw_player(player, size = 30, gk = false) {
+    const p = project(rotate(player.coords, ANGLE));
+    const boxWidth = 80;
+    const boxHeight = 18;
 
-    // 1. Draw the Player Icon (Red Square)
-    ctx.fillStyle = "red";
-    ctx.fillRect(player.x - offset, player.y - offset, size, size);
+    // --- 1. DRAW THE SHIRT ICON ---
+    ctx.save();
+    ctx.translate(p.x, p.y); // Move to player's projected position
 
-    // 2. Draw the Label Box (Yellow Rectangle)
-    ctx.fillStyle = "yellow";
-    const text_box_x = player.x - boxWidth / 2;
-    const text_box_y = player.y + size; // Positioned below the icon
+    // Shirt styling
+    ctx.fillStyle = gk ? "#d3e73c" : "#e74c3c"; // Red shirt
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = "round";
+
+    // Draw the Shirt Outline
+    // We use 'size' to keep it proportional
+    const s = size / 2;
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.4, -s);      // Left Neck
+    ctx.lineTo(-s, -s * 0.8);      // Top Left Shoulder
+    ctx.lineTo(-s * 1.2, -s * 0.2);// Left Sleeve End
+    ctx.lineTo(-s * 0.8, 0);       // Left Armpit
+    ctx.lineTo(-s * 0.8, s);       // Bottom Left
+    ctx.lineTo(s * 0.8, s);        // Bottom Right
+    ctx.lineTo(s * 0.8, 0);        // Right Armpit
+    ctx.lineTo(s * 1.2, -s * 0.2); // Right Sleeve End
+    ctx.lineTo(s, -s * 0.8);       // Top Right Shoulder
+    ctx.lineTo(s * 0.4, -s);       // Right Neck
+    ctx.quadraticCurveTo(0, -s * 0.7, -s * 0.4, -s); // Neckline curve
+
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+
+    // --- 2. DRAW THE LABEL BOX ---
+    ctx.fillStyle = "rgba(255, 255, 0, 0.9)"; // Semi-transparent yellow
+    const text_box_x = p.x - boxWidth / 2;
+    const text_box_y = p.y + (size * 0.7); // Shifted slightly for better spacing
+
     ctx.fillRect(text_box_x, text_box_y, boxWidth, boxHeight);
 
-    // 3. Draw the Text (Centered)
+    // --- 3. DRAW THE TEXT ---
     ctx.fillStyle = "black";
-    ctx.font = "12px sans-serif"; // Set a specific font size for consistency
+    ctx.font = "bold 11px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    // Key Fixes:
-    ctx.textAlign = "center";     // Horizontal alignment
-    ctx.textBaseline = "middle";  // Vertical alignment
-
-    // Draw text at the exact center of the yellow box
     ctx.fillText(
         player.name,
-        text_box_x + (boxWidth / 2),
+        p.x,
         text_box_y + (boxHeight / 2)
     );
 }
 
-for (player of players) {
-    draw_player(player)
-}
+players.forEach((player, index) => {
+    index == 0 ? draw_player(player, size = 30, gk = true) : draw_player(player)
+})
