@@ -22,7 +22,7 @@ canvas.style.height = 800 + 'px';
 canvas.width = 800 * dpr;
 canvas.height = 800 * dpr;
 const ctx = canvas.getContext('2d');
-ctx.translate(canvas.width / 2, canvas.height / 2);
+ctx.translate(canvas.width / 2, canvas.height / 2 + 300);
 ctx.scale(dpr, dpr);
 
 //ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
@@ -30,6 +30,13 @@ ctx.scale(dpr, dpr);
 //ctx.shadowOffsetY = 5;
 
 ctx.save();
+
+const gradient = ctx.createLinearGradient(0, -canvas.height / 2, 0, canvas.height / 2);
+gradient.addColorStop(0, "#00bfff");
+gradient.addColorStop(1, "#ff0000");
+
+ctx.fillStyle = gradient;
+ctx.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
 const ANGLE = 2 * Math.PI - 0.0005;
 // 1. PITCH
@@ -176,23 +183,82 @@ py = 60;
 dy = (pitch_height / 6) - (2 * py / 3);
 dx = pitch_width / 5;
 starting_x = pitch_width / 2;
+
 players = [
-    // line 1
-    { coords: { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), z: 1 }, name: "P. Layer" },
-    // line 2
-    { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 }, name: "P. Layer" },
-    // line 3
-    { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: .5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
-    { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 }, name: "P. Layer" },
-    // line 4
-    { coords: { x: -.5 * dx, y: -py, z: 1 }, name: "P. Layer" },
-    { coords: { x: .5 * dx, y: -py, z: 1 }, name: "P. Layer" }
+    { name: "Raya" },
+    { name: "Timber" },
+    { name: "Saliba" },
+    { name: "Gabriel" },
+    { name: "Lewis-Skelly" },
+    { name: "Odegaard" },
+    { name: "Partey" },
+    { name: "Rice" },
+    { name: "Saka" },
+    { name: "Havertz" },
+    { name: "Martinelli" }
 ]
+
+const formations = {
+    "4-4-2": [
+        // GK
+        { coords: { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), z: 1 } },
+        // Defence
+        { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        // Midfield
+        { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        { coords: { x: .5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        // Attack
+        { coords: { x: -.5 * dx, y: -py, z: 1 } },
+        { coords: { x: .5 * dx, y: -py, z: 1 } }
+    ],
+    "4-3-3": [
+        // GK
+        { coords: { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), z: 1 } },
+        // Defence
+        { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        // Midfield
+        { coords: { x: -dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        { coords: { x: 0, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        { coords: { x: dx, y: (-pitch_height / 2) + (35 * scale_factor), z: 1 } },
+        // Attack
+        { coords: { x: -1.5 * dx, y: -py, z: 1 } },
+        { coords: { x: 0, y: -py, z: 1 } },
+        { coords: { x: 1.5 * dx, y: -py, z: 1 } }
+    ],
+    "4-2-3-1": [
+        // GK
+        { coords: { x: 0, y: (-pitch_height / 2) + (6 * scale_factor), z: 1 } },
+        // Defence
+        { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: .5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (18 * scale_factor), z: 1 } },
+        // Defensive Midfield
+        { coords: { x: -.5 * dx, y: (-pitch_height / 2) + (28 * scale_factor), z: 1 } },
+        { coords: { x: .5 * dx, y: (-pitch_height / 2) + (28 * scale_factor), z: 1 } },
+        // Attacking Midfield
+        { coords: { x: -1.5 * dx, y: (-pitch_height / 2) + (38 * scale_factor), z: 1 } },
+        { coords: { x: 0, y: (-pitch_height / 2) + (38 * scale_factor), z: 1 } },
+        { coords: { x: 1.5 * dx, y: (-pitch_height / 2) + (38 * scale_factor), z: 1 } },
+        // Striker
+        { coords: { x: 0, y: -py, z: 1 } }
+    ]
+}
+
+const titlePoint = { x: 0, y: (-pitch_height / 2)};
+ctx.fillStyle = "black";
+ctx.font = "bold 30px sans-serif";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+ctx.fillText("Starting XI", titlePoint.x, titlePoint.y);
 
 draw_stripes(6);
 ctx.strokeStyle = "white";
@@ -222,8 +288,8 @@ function draw_player(player, size = 30, gk = false) {
     ctx.translate(p.x, p.y); // Move to player's projected position
 
     // Shirt styling
-    ctx.fillStyle = gk ? "#d3e73c" : "#e74c3c"; // Red shirt
-    ctx.strokeStyle = "white";
+    ctx.fillStyle = gk ? "#d3e73c" : "#00bfff";
+    ctx.strokeStyle = gk ? "#000000" : "#ffffff";
     ctx.lineWidth = 1.5;
     ctx.lineJoin = "round";
 
@@ -256,7 +322,7 @@ function draw_player(player, size = 30, gk = false) {
 
     // --- 3. DRAW THE TEXT ---
     ctx.fillStyle = "black";
-    ctx.font = "bold 11px sans-serif";
+    ctx.font = "bold 12px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
@@ -267,6 +333,33 @@ function draw_player(player, size = 30, gk = false) {
     );
 }
 
-players.forEach((player, index) => {
-    index == 0 ? draw_player(player, size = 30, gk = true) : draw_player(player)
-})
+const formation = formations["4-3-3"]
+
+formation.forEach((pos, index) => {
+    // Get the player name that matches this formation slot
+    const player = players[index];
+
+    // Combine the name and the coordinates
+    const playerData = {
+        name: player.name,
+        coords: pos.coords
+    };
+
+    // Draw them (index 0 is your GK)
+    draw_player(playerData, 30, index === 0);
+});
+
+const logo = new Image();
+logo.src = '/img/woodley-fc.png';
+logo.onload = () => {
+    ctx.save();
+    // This ignores ALL your translates and scales and goes to the literal top-left
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // Re-apply only the DPR so it stays sharp
+    ctx.scale(dpr, dpr);
+
+    // Now 800 is the true edge of your CSS box
+    ctx.drawImage(logo, 800 - 150, 800 - 150, 100, 100);
+    ctx.restore();
+}
