@@ -32,13 +32,13 @@ ctx.scale(dpr, dpr);
 ctx.save();
 
 const gradient = ctx.createLinearGradient(0, -canvas.height / 2, 0, canvas.height / 2);
-gradient.addColorStop(0, "#a8a8a8");
-gradient.addColorStop(1, "#ffffff");
+gradient.addColorStop(0, "#fff");
+gradient.addColorStop(1, "#dadada");
 
 ctx.fillStyle = gradient;
 ctx.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
-const ANGLE = 2 * Math.PI //- 0.0005;
+const ANGLE = 2 * Math.PI - 0.0005;
 // 1. PITCH
 pitch_unit_width = 70;
 pitch_unit_height = 110;
@@ -113,7 +113,7 @@ function draw_stripes(numStripes = 5) {
 
     for (let i = 0; i < numStripes; i++) {
         // Toggle colors
-        ctx.fillStyle = (i % 2 === 0) ? "#2d5a27" : "#3a6d33"; // Dark green / Light green
+        ctx.fillStyle = (i % 2 === 0) ? "#009b4c" : "#00a34f"; // Dark green / Light green
 
         // Define the 4 corners of the stripe in 3D space
         const yTop = startY + (i * stripeHeight);
@@ -333,7 +333,7 @@ function draw_player(player, size = 30, gk = false) {
     );
 }
 
-const formation = formations["4-4-2"]
+const formation = formations["4-3-3"]
 
 formation.forEach((pos, index) => {
     // Get the player name that matches this formation slot
@@ -350,7 +350,7 @@ formation.forEach((pos, index) => {
 });
 
 const logo = new Image();
-logo.src = '/img/woodley-fc.png';
+logo.src = '/img/kjsmith.svg';
 logo.onload = () => {
     ctx.save();
     // This ignores ALL your translates and scales and goes to the literal top-left
@@ -360,7 +360,7 @@ logo.onload = () => {
     ctx.scale(dpr, dpr);
 
     // Now 800 is the true edge of your CSS box
-    ctx.drawImage(logo, 800 - 150, 638, 100, 100);
+    ctx.drawImage(logo, 800 - 150, 600, 100, 100);
     ctx.restore();
 }
 
