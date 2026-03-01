@@ -22,7 +22,7 @@ canvas.style.height = 800 + 'px';
 canvas.width = 800 * dpr;
 canvas.height = 800 * dpr;
 const ctx = canvas.getContext('2d');
-ctx.translate(canvas.width / 2, canvas.height / 2 + 300);
+ctx.translate(canvas.width / 2, canvas.height / 2 + 450);
 ctx.scale(dpr, dpr);
 
 //ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
@@ -32,17 +32,17 @@ ctx.scale(dpr, dpr);
 ctx.save();
 
 const gradient = ctx.createLinearGradient(0, -canvas.height / 2, 0, canvas.height / 2);
-gradient.addColorStop(0, "#00bfff");
-gradient.addColorStop(1, "#ff0000");
+gradient.addColorStop(0, "#a8a8a8");
+gradient.addColorStop(1, "#ffffff");
 
 ctx.fillStyle = gradient;
 ctx.fillRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
 
-const ANGLE = 2 * Math.PI - 0.0005;
+const ANGLE = 2 * Math.PI //- 0.0005;
 // 1. PITCH
 pitch_unit_width = 70;
 pitch_unit_height = 110;
-scale_factor = 9;
+scale_factor = 10;
 pitch_width = scale_factor * pitch_unit_width;
 pitch_height = scale_factor * pitch_unit_height;
 
@@ -113,7 +113,7 @@ function draw_stripes(numStripes = 5) {
 
     for (let i = 0; i < numStripes; i++) {
         // Toggle colors
-        ctx.fillStyle = (i % 2 === 0) ? "#24701a" : "#21551b"; // Dark green / Light green
+        ctx.fillStyle = (i % 2 === 0) ? "#2d5a27" : "#3a6d33"; // Dark green / Light green
 
         // Define the 4 corners of the stripe in 3D space
         const yTop = startY + (i * stripeHeight);
@@ -253,12 +253,12 @@ const formations = {
     ]
 }
 
-const titlePoint = { x: 0, y: (-pitch_height / 2)};
+const titlePoint = { x: 0, y: (-pitch_height / 2) - 30};
 ctx.fillStyle = "black";
 ctx.font = "bold 30px sans-serif";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.fillText("Starting XI", titlePoint.x, titlePoint.y);
+ctx.fillText("Starting XI on 1st March 2026", titlePoint.x, titlePoint.y);
 
 draw_stripes(6);
 ctx.strokeStyle = "white";
@@ -333,7 +333,7 @@ function draw_player(player, size = 30, gk = false) {
     );
 }
 
-const formation = formations["4-3-3"]
+const formation = formations["4-4-2"]
 
 formation.forEach((pos, index) => {
     // Get the player name that matches this formation slot
@@ -360,6 +360,55 @@ logo.onload = () => {
     ctx.scale(dpr, dpr);
 
     // Now 800 is the true edge of your CSS box
-    ctx.drawImage(logo, 800 - 150, 800 - 150, 100, 100);
+    ctx.drawImage(logo, 800 - 150, 638, 100, 100);
     ctx.restore();
 }
+
+const substitutes = ["Neto", "White", "Kiwior", "Merino", "Trossard", "Jesus", "Sterling"];
+
+function draw_subs_list(subs) {
+    ctx.save();
+    // 1. Reset to top-left coordinate system (ignoring the pitch translation)
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+
+    // 2. Styling for the Sub Header
+    ctx.fillStyle = "#333"; // Dark gray for text
+    ctx.font = "bold 16px sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("SUBSTITUTES", 50, 650);
+
+    // 3. Styling for the Names
+    ctx.font = "14px sans-serif";
+    ctx.fillStyle = "#555";
+    
+    // Join them with a dot or a pipe for a clean look
+    const subsString = subs.join(" • ");
+    
+    // Draw the list (adjust 735 to move it up or down)
+    ctx.fillText(subsString, 50, 675);
+
+    ctx.restore();
+}
+
+draw_subs_list(substitutes);
+
+
+// DOWNLOAD IMAGE CODE
+
+document.getElementById('downloadBtn').addEventListener('click', function() {
+    // 1. Convert canvas to a PNG image string
+    // This captures the current state of the canvas
+    const dataURL = canvas.toDataURL('image/png');
+
+    // 2. Create a "virtual" link to trigger the download
+    const link = document.createElement('a');
+    
+    // 3. Set the filename
+    const date = new Date().toLocaleDateString().replace(/\//g, '-');
+    link.download = `starting-xi-${date}.png`;
+    
+    // 4. Link the image data and "click" it
+    link.href = dataURL;
+    link.click();
+});
